@@ -1,6 +1,32 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+
+const url = 'mongodb+srv://uyenfam9x:ctQSfeHAJm6O58XL@cluster0.261zk.mongodb.net/DB_INTERACTION?retryWrites=true&w=majority'
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+
+const formSchema = new mongoose.Schema(
+    {
+        data: Object
+    },
+    {
+        collection: "Form"
+    }
+)
+
+const Form = mongoose.model('Form', formSchema)
+
+const formData = (bodyData) => {
+    Form({ data: bodyData }).save((err) => {
+        if(err) {
+            throw err
+        }
+    })
+}
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -16,7 +42,7 @@ app.get('/', (req, res) => {
 
 // submit form
 app.post('/', urlencodedParser, (req, res) => {
-    console.log(req.body)
+    formData(req.body)
     res.render('success-page')
 })
 
