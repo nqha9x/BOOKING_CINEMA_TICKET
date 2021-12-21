@@ -30,3 +30,7 @@
             padding: 20px;
           }
   
+          .container{
+            text-align: center;
+  border: 3px solid green;
+          }
