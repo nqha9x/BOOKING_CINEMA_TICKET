@@ -2,11 +2,15 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const dotenv = require('dotenv')
 
-const url = 'mongodb+srv://uyenfam9x:ctQSfeHAJm6O58XL@cluster0.261zk.mongodb.net/DB_INTERACTION?retryWrites=true&w=majority'
-mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+// connect mongoose
+dotenv.config()
+
+mongoose.connect(process.env.MONGO_URL)
+.then(() => console.log('Connected to DB!'))
+.catch((err) => {
+    console.log(err)
 })
 
 const formSchema = new mongoose.Schema(
@@ -14,7 +18,7 @@ const formSchema = new mongoose.Schema(
         data: Object
     },
     {
-        collection: "Form"
+        collection: 'Form'
     }
 )
 
@@ -29,8 +33,6 @@ const formData = (bodyData) => {
 }
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
-
-const PORT = 1999
 
 app.set('view engine', 'ejs')
 app.use(express.static('views'))
@@ -47,6 +49,6 @@ app.post('/', urlencodedParser, (req, res) => {
 })
 
 // server listening
-app.listen(PORT, () => {
-    console.log(`SERVER listening on PORT: http://localhost:${PORT}`)
+app.listen(1999, () => {
+    console.log('SERVER listening on PORT: http://localhost:1999')
 })
